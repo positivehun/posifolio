@@ -1,0 +1,22 @@
+{
+  "name": "posifolio",
+  "version": "1.0.0",
+  "description": "Personal Portfolio Website",
+  "main": "index.html",
+  "scripts": {
+    "deploy": "gh-pages -d ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/positivehun/posifolio.git"
+  },
+  "author": "김지헌",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/positivehun/posifolio/issues"
+  },
+  "homepage": "https://positivehun.github.io/posifolio",
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
+  }
+}
