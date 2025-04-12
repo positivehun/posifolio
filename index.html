@@ -727,6 +727,214 @@
         .about-me-content {
             flex: 1;
         }
+
+        /* 모바일 반응형 스타일 추가 */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .animation-container {
+                width: 30%;
+                height: 300px;
+            }
+
+            .content-container {
+                width: 65%;
+                padding: 1rem;
+            }
+
+            .fixed-box {
+                width: calc(65% - 2rem);
+                padding: 1rem;
+            }
+
+            .fixed-box-background {
+                width: 65%;
+            }
+
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-image {
+                width: 150px;
+                height: 150px;
+                margin: 0 auto 20px;
+            }
+
+            .profile-content {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .skill-category {
+                padding: 15px;
+            }
+
+            .skill-category h3 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+
+            .skill-list {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .skill-item {
+                margin: 5px;
+            }
+
+            .certifications-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .certification-category {
+                padding: 15px;
+            }
+
+            .certification-category h3 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+
+            .certification-list {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .certification-item {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .project-card {
+                margin: 0;
+            }
+
+            .project-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .project-links a {
+                margin: 5px 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .contact-item {
+                margin: 10px 0;
+            }
+
+            .social-links {
+                justify-content: center;
+                margin-top: 15px;
+            }
+
+            .road {
+                height: 300px;
+            }
+
+            #truck, #airplane, #ship {
+                width: 60px;
+                height: auto;
+                left: calc(50% - 30px);
+            }
+
+            .trail {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* 작은 모바일 화면을 위한 추가 스타일 */
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .animation-container {
+                width: 25%;
+                height: 250px;
+            }
+
+            .content-container {
+                width: 70%;
+                padding: 0.8rem;
+            }
+
+            .fixed-box {
+                width: calc(70% - 1.6rem);
+                padding: 0.8rem;
+            }
+
+            .fixed-box-background {
+                width: 70%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .profile-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .skill-item, .certification-item {
+                font-size: 0.9rem;
+            }
+
+            .project-card {
+                padding: 15px;
+            }
+
+            .project-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .project-card p {
+                font-size: 0.9rem;
+            }
+
+            .road {
+                height: 250px;
+            }
+
+            #truck, #airplane, #ship {
+                width: 50px;
+                height: auto;
+                left: calc(50% - 25px);
+            }
+
+            .trail {
+                width: 25px;
+                height: 25px;
+            }
+        }
     </style>
 </head>
 <body>
