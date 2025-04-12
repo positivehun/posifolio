@@ -43,7 +43,7 @@
         }
 
         .animation-container {
-            width: 30%;
+            width: 20%;
             height: 100%;
             position: relative;
             overflow: hidden;
@@ -53,7 +53,7 @@
             position: absolute;
             top: 0;
             right: 0;
-            width: 65%;
+            width: 75%;
             padding: 2rem;
             color: white;
             background: #1a1a1a;  /* 도로 색상으로 시작 */
@@ -82,7 +82,7 @@
             position: fixed;
             top: 2rem;
             right: 2rem;
-            width: calc(65% - 4rem);
+            width: calc(75% - 4rem);
             padding: 2rem;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -96,7 +96,7 @@
             position: fixed;
             top: 0;
             right: 0;
-            width: 65%;
+            width: 75%;
             height: 200px; /* 고정된 박스 높이보다 약간 더 크게 설정 */
             z-index: 99;
             transition: background 0.5s ease;
@@ -219,6 +219,48 @@
             opacity: 0;
         }
 
+        /* 운송수단 궤적 효과 */
+        .trail {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0; /* z-index를 0으로 변경하여 운송수단 아래에 표시 */
+        }
+
+        .smoke-trail {
+            width: 20px;
+            height: 20px;
+            background: rgba(200, 200, 200, 0.3);
+            border-radius: 50%;
+            animation: fadeOut 4s forwards;
+        }
+
+        .cloud-trail {
+            width: 30px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            animation: fadeOut 5s forwards;
+        }
+
+        .wave-trail {
+            width: 40px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 5px;
+            animation: fadeOut 4s forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(2.5);
+            }
+        }
+
         #truck, #airplane, #ship {
             position: absolute;
             width: 150px;
@@ -226,6 +268,7 @@
             transform-origin: center;
             transition: top 0.3s ease;
             left: calc(50% - 75px);
+            z-index: 2; /* 운송수단의 z-index를 2로 설정하여 자국 위에 표시 */
         }
 
         #truck {
@@ -583,6 +626,7 @@
             <img id="truck" src="vehicle/truck.png" alt="Truck">
             <img id="airplane" src="vehicle/airplane.png" alt="Airplane">
             <img id="ship" src="vehicle/ship.png" alt="Ship">
+            <div id="trails"></div>
         </div>
     </div>
     <div class="content-container">
@@ -884,61 +928,119 @@
         const ship = document.getElementById('ship');
         const road = document.querySelector('.road');
 
+        // 운송수단 궤적 효과 생성
+        function createTrail(type, x, y) {
+            const trail = document.createElement('div');
+            trail.className = `trail ${type}-trail`;
+            trail.style.left = `${x}%`;
+            trail.style.top = `${y}%`;
+            document.getElementById('trails').appendChild(trail);
+
+            // 애니메이션 종료 후 요소 제거
+            setTimeout(() => {
+                trail.remove();
+            }, type === 'cloud' ? 5000 : 4000);
+        }
+
+        // 스크롤 이벤트 리스너
+        let lastScrollY = window.scrollY;
         window.addEventListener('scroll', () => {
             const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            const isScrollingDown = window.scrollY > lastScrollY;
+            lastScrollY = window.scrollY;
             
-            // 배경색 변경
-            if (scrollPercentage > 50) {
-                document.body.setAttribute('data-scroll', 'sea');
-            } else if (scrollPercentage > 25) {
-                document.body.setAttribute('data-scroll', 'sky');
+            // 트럭 위치 계산 (0-30% 구간에서 이동)
+            if (scrollPercentage >= 0 && scrollPercentage <= 30) {
+                const truckPosition = Math.min(Math.max(scrollPercentage * 4, 0), 100);
+                truck.style.top = `${truckPosition}%`;
+                truck.style.opacity = 1;
+                
+                // 트럭 궤적 생성
+                if (isScrollingDown) {
+                    const truckRect = truck.getBoundingClientRect();
+                    const x = 48;
+                    const y = ((truckRect.top + truckRect.height / 2) / window.innerHeight * 100) - 10;
+                    createTrail('smoke', x, y);
+                }
             } else {
-                document.body.setAttribute('data-scroll', 'road');
+                truck.style.opacity = 0;
             }
-            
-            // 트럭 위치 계산 (0-25% 구간에서 이동)
-            const truckPosition = Math.min(Math.max(scrollPercentage * 4, 0), 120);
-            const isTruckOutOfView = scrollPercentage > 25;
-            
-            // 비행기 위치 계산 (25-50% 구간에서 이동)
-            const airplanePosition = isTruckOutOfView
-                ? Math.min(Math.max((scrollPercentage - 25) * 4, -20), 120)
-                : -20;
-            const isAirplaneOutOfView = scrollPercentage > 50;
 
-            // 배 위치 전환 (50-90%)
-            if (scrollPercentage >= 50) {
-                ship.style.opacity = '1';
-                ship.style.top = `${Math.min((scrollPercentage - 50) * 2.5, 100)}%`;
-                ship.style.transform = 'rotate(180deg)';
+            // 비행기 위치 계산 (30-60% 구간에서 이동)
+            if (scrollPercentage >= 30 && scrollPercentage <= 60) {
+                const airplanePosition = Math.min(Math.max((scrollPercentage - 30) * 4, 0), 100);
+                airplane.style.top = `${airplanePosition}%`;
+                airplane.style.opacity = 1;
+                
+                // 비행기 궤적 생성 (두 개의 자국)
+                if (isScrollingDown) {
+                    const airplaneRect = airplane.getBoundingClientRect();
+                    const y = ((airplaneRect.top + airplaneRect.height / 2) / window.innerHeight * 100);
+                    
+                    // 첫 번째 자국 (현재 위치 + 5픽셀)
+                    const x1 = 27;
+                    createTrail('cloud', x1, y);
+                    
+                    // 두 번째 자국 (현재 위치 - 5픽셀)
+                    const x2 = 63;
+                    createTrail('cloud', x2, y);
+                }
             } else {
-                ship.style.opacity = '0';
-                ship.style.top = '-20%';
-                ship.style.transform = 'rotate(180deg)';
+                airplane.style.opacity = 0;
+            }
+
+            // 배 위치 계산 (60% 이후)
+            if (scrollPercentage >= 60) {
+                const shipPosition = Math.min(Math.max((scrollPercentage - 60) * 4, 0), 100);
+                ship.style.top = `${shipPosition}%`;
+                ship.style.opacity = 1;
+                
+                // 배 궤적 생성
+                if (isScrollingDown) {
+                    const shipRect = ship.getBoundingClientRect();
+                    const x = 46;
+                    const y = ((shipRect.top + shipRect.height / 2) / window.innerHeight * 100) - 10;
+                    createTrail('wave', x, y);
+                }
+            } else {
+                ship.style.opacity = 0;
             }
             
             // 배경 전환
-            if (scrollPercentage > 50) {
-                // 바다로 전환
-                road.classList.remove('sky');
-                road.classList.add('sea');
-            } else if (scrollPercentage > 25) {
-                // 하늘로 전환 (25% 이후에 전환)
-                road.classList.remove('sea');
-                road.classList.add('sky');
-                updateSkyElements();
+            if (scrollPercentage < 30) {
+                // 도로 배경으로 전환
+                if (document.body.getAttribute('data-scroll') !== 'road') {
+                    document.body.setAttribute('data-scroll', 'road');
+                    road.classList.remove('sky', 'sea');
+                    // 하늘 배경의 구름 제거
+                    const clouds = document.querySelectorAll('.cloud');
+                    clouds.forEach(cloud => cloud.remove());
+                    // 바다 배경의 파도 제거
+                    const waves = document.querySelectorAll('.wave');
+                    waves.forEach(wave => wave.remove());
+                }
+            } else if (scrollPercentage < 60) {
+                // 하늘 배경으로 전환
+                if (document.body.getAttribute('data-scroll') !== 'sky') {
+                    document.body.setAttribute('data-scroll', 'sky');
+                    road.classList.remove('sea');
+                    road.classList.add('sky');
+                    updateSkyElements();
+                    // 바다 배경의 파도 제거
+                    const waves = document.querySelectorAll('.wave');
+                    waves.forEach(wave => wave.remove());
+                }
             } else {
-                // 도로 상태로 전환
-                removeElements();
+                // 바다 배경으로 전환
+                if (document.body.getAttribute('data-scroll') !== 'sea') {
+                    document.body.setAttribute('data-scroll', 'sea');
+                    road.classList.remove('sky');
+                    road.classList.add('sea');
+                    // 하늘 배경의 구름 제거
+                    const clouds = document.querySelectorAll('.cloud');
+                    clouds.forEach(cloud => cloud.remove());
+                }
             }
-
-            // 트럭 위치와 투명도 적용
-            truck.style.top = `${truckPosition}%`;
-            truck.style.opacity = isTruckOutOfView ? 0 : 1;
-
-            // 비행기 위치와 투명도 적용
-            airplane.style.top = `${airplanePosition}%`;
-            airplane.style.opacity = isTruckOutOfView && !isAirplaneOutOfView ? 1 : 0;
         });
 
         function updateSkyElements() {
