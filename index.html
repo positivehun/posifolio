@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 - 스크롤 애니메이션</title>
+    <!-- Google Fonts 추가 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;  /* 도로 색상으로 시작 */
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+            font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+        }
+
+        /* 스크롤 위치에 따른 배경색 변경 */
+        body[data-scroll="road"] {
+            background: linear-gradient(0deg, #1a1a1a 0%, #1a1a1a 100%);
+        }
+
+        body[data-scroll="sky"] {
+            background: #87CEEB;  /* 하늘색 */
+        }
+
+        body[data-scroll="sea"] {
+            background: #1E90FF;  /* 바다색 */
+        }
+
+        .container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            z-index: 1;
+        }
+
+        .animation-container {
+            width: 30%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 65%;
+            padding: 2rem;
+            color: white;
+            background: #1a1a1a;  /* 도로 색상으로 시작 */
+            z-index: 2;
+            transition: background 0.5s ease;
+            font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+        }
+
+        /* 스크롤 위치에 따른 배경색 변경 */
+        body[data-scroll="road"] .content-container {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        body[data-scroll="sky"] .content-container {
+            background: #87CEEB;
+            color: #333;
+        }
+
+        body[data-scroll="sea"] .content-container {
+            background: #1E90FF;
+            color: white;
+        }
+
+        .fixed-box {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            width: calc(65% - 4rem);
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        /* 고정된 박스 뒤에 배경 박스 추가 */
+        .fixed-box-background {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 65%;
+            height: 200px; /* 고정된 박스 높이보다 약간 더 크게 설정 */
+            z-index: 99;
+            transition: background 0.5s ease;
+        }
+
+        /* 스크롤 위치에 따른 배경색 변경 */
+        body[data-scroll="road"] .fixed-box-background {
+            background: #1a1a1a;
+        }
+
+        body[data-scroll="sky"] .fixed-box-background {
+            background: #87CEEB;
+        }
+
+        body[data-scroll="sea"] .fixed-box-background {
+            background: #1E90FF;
+        }
+
+        .fixed-box h2 {
+            margin: 0 0 1rem 0;
+            font-size: 2rem;
+            color: inherit;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .fixed-box p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: inherit;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .scroll-container {
+            position: relative;
+            width: 100%;
+            height: 120vh; /* 화면 높이의 1.2배로 조정 */
+            margin-top: 100vh; /* 첫 화면 높이만큼 여백 추가 */
+            z-index: 0;
+        }
+
+        .road {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                0deg,
+                #1a1a1a 0%,
+                #1a1a1a 100%
+            );
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .sky {
+            background: #87CEEB !important;  /* 하늘색 */
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .road:not(.sky) ~ .cloud {
+            opacity: 0;
+        }
+
+        .sky.active::before {
+            opacity: 1;
+        }
+
+        .sea.active::before {
+            opacity: 1;
+        }
+
+        /* 기존 도로 스타일 수정 */
+        .road::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                #ffffff 0px,
+                #ffffff 50px,
+                transparent 50px,
+                transparent 100px
+            );
+            transition: opacity 0.5s ease;
+        }
+
+        .road::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(
+                    90deg,
+                    #ffffff 0px,
+                    #ffffff 5px,
+                    transparent 5px,
+                    transparent calc(100% - 5px),
+                    #ffffff calc(100% - 5px),
+                    #ffffff 100%
+                );
+            transition: opacity 0.5s ease;
+        }
+
+        .sky::before {
+            opacity: 1;
+        }
+
+        .sky.road::before,
+        .sky.road::after {
+            opacity: 0;
+        }
+
+        #truck, #airplane, #ship {
+            position: absolute;
+            width: 150px;
+            height: auto;
+            transform-origin: center;
+            transition: top 0.3s ease;
+            left: calc(50% - 75px);
+        }
+
+        #truck {
+            transform: rotate(158deg);
+            opacity: 1;
+        }
+
+        #airplane {
+            transform: rotate(180deg);
+            top: -20%;
+            opacity: 0;
+        }
+
+        #ship {
+            transform: rotate(180deg);
+            top: -20%; /* 배의 초기 위치를 화면 상단으로 설정 */
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sea {
+            background: #1E90FF !important;  /* 바다색 */
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .sea::before,
+        .sea::after {
+            opacity: 0 !important;
+        }
+
+        .sea .cloud {
+            opacity: 0 !important;
+        }
+
+        .cloud {
+            position: absolute;
+            width: 100px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            box-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(255, 255, 255, 0.6);
+            opacity: 0.8;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+        }
+
+        .cloud::before {
+            width: 50px;
+            height: 50px;
+            top: -20px;
+            left: 15px;
+        }
+
+        .cloud::after {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            right: 15px;
+        }
+
+        .cloud-1 {
+            top: 20%;
+            left: 10%;
+            transform: scale(1.2);
+        }
+
+        .cloud-2 {
+            top: 40%;
+            left: 30%;
+            transform: scale(0.8);
+        }
+
+        .cloud-3 {
+            top: 15%;
+            left: 50%;
+            transform: scale(1.5);
+        }
+
+        .cloud-4 {
+            top: 60%;
+            left: 20%;
+            transform: scale(0.9);
+        }
+
+        .cloud-5 {
+            top: 30%;
+            left: 70%;
+            transform: scale(1.1);
+        }
+
+        /* 포트폴리오 섹션 스타일 */
+        .portfolio-section {
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-right: 2rem;
+            margin-left: 2rem;
+            margin-top: 6rem; /* 고정된 박스 아래에 위치하도록 여백 추가 */
+            min-height: 250px; /* 최소 높이 설정 */
+        }
+
+        .portfolio-section:first-of-type {
+            margin-top: 10rem; /* 첫 번째 섹션(About Me)의 상단 여백 유지 */
+        }
+
+        .portfolio-section h3 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: inherit;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        .portfolio-section p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+            color: inherit;
+        }
+
+        .portfolio-section ul {
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .portfolio-section li {
+            margin-bottom: 0.4rem;
+            color: inherit;
+        }
+
+        .skill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .skill-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.4rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: inherit;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 0.8rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 0.5rem;
+            padding: 1.2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .project-card:visited {
+            color: inherit;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            color: inherit;
+        }
+
+        .project-card:active {
+            color: inherit;
+        }
+
+        .project-card h4 {
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: inherit;
+        }
+
+        .project-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            color: inherit;
+        }
+
+        .project-card .skill-container {
+            margin-top: 0.8rem;
+        }
+
+        .certificate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .certificate-item h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: inherit;
+        }
+
+        .certificate-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: inherit;
+        }
+
+        .experience-item {
+            margin-bottom: 1.2rem;
+        }
+
+        .experience-item h4 {
+            margin: 0 0 0.4rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: inherit;
+        }
+
+        .experience-item p {
+            margin: 0 0 0.4rem 0;
+            font-size: 0.9rem;
+            color: inherit;
+        }
+
+        .experience-item ul {
+            margin-top: 0.4rem;
+        }
+
+        /* Contact Me 섹션 스타일 */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .contact-item i {
+            font-size: 1.2rem;
+            color: inherit;
+        }
+
+        .contact-item a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            opacity: 0.8;
+        }
+
+        /* 프로젝트 섹션 높이 조정 */
+        .portfolio-section:nth-of-type(5) {
+            min-height: 400px; /* 프로젝트 섹션 높이 조정 */
+        }
+
+        .portfolio-section:nth-of-type(6) {
+            min-height: 400px; /* 개인 프로젝트 섹션 높이 조정 */
+        }
+
+        /* Contact Me 섹션 높이 조정 */
+        .portfolio-section:last-of-type {
+            min-height: 180px; /* Contact Me 섹션 높이 설정 */
+            margin-bottom: 2rem; /* 하단 여백 추가 */
+            position: relative;
+            top: 0vh; /* 화면 높이의 0배만큼 아래로 이동 */
+        }
+
+        /* To Be 섹션 스타일 */
+        .to-be-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .to-be-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 0.5rem;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .to-be-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .to-be-item i {
+            font-size: 1.2rem;
+            color: inherit;
+            margin-top: 0.2rem;
+        }
+
+        .to-be-item-content {
+            flex: 1;
+        }
+
+        .to-be-item h4 {
+            margin: 0 0 0.4rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: inherit;
+        }
+
+        .to-be-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="animation-container">
+            <div class="road"></div>
+            <img id="truck" src="vehicle/truck.png" alt="Truck">
+            <img id="airplane" src="vehicle/airplane.png" alt="Airplane">
+            <img id="ship" src="vehicle/ship.png" alt="Ship">
+        </div>
+    </div>
+    <div class="content-container">
+        <div class="fixed-box-background"></div>
+        <div class="fixed-box">
+            <h2>물류 시스템 개발자 포트폴리오</h2>
+            <p>안녕하세요. 물류 시스템 개발자입니다. 스크롤을 내려서 제 프로젝트들을 확인해보세요.</p>
+        </div>
+
+        <!-- 자기소개 섹션 -->
+        <div class="portfolio-section" style="margin-top: 12rem;">
+            <h3>About Me</h3>
+            <p>안녕하세요. 저는 물류 시스템 개발자로서 효율적인 물류 프로세스와 자동화 솔루션을 개발하는 데 열정을 가지고 있습니다. 복잡한 물류 네트워크를 단순화하고, 실시간 추적 시스템을 구축하며, 데이터 기반 의사결정을 지원하는 시스템을 개발하고 있습니다.</p>
+            <p>현재는 물류 자동화, 실시간 추적, 재고 관리, 경로 최적화 등의 프로젝트에 참여하고 있으며, 최신 기술을 활용하여 물류 산업의 디지털 전환에 기여하고 있습니다.</p>
+        </div>
+
+        <!-- 기술 스택 섹션 -->
+        <div class="portfolio-section">
+            <h3>Technical Skills</h3>
+            <div class="skill-container">
+                <span class="skill-item">Java</span>
+                <span class="skill-item">Spring Boot</span>
+                <span class="skill-item">JavaScript</span>
+                <span class="skill-item">React</span>
+                <span class="skill-item">Node.js</span>
+                <span class="skill-item">SQL</span>
+                <span class="skill-item">MongoDB</span>
+                <span class="skill-item">Docker</span>
+                <span class="skill-item">Kubernetes</span>
+                <span class="skill-item">AWS</span>
+                <span class="skill-item">CI/CD</span>
+                <span class="skill-item">Git</span>
+                <span class="skill-item">RESTful API</span>
+                <span class="skill-item">Microservices</span>
+                <span class="skill-item">Agile</span>
+            </div>
+        </div>
+
+        <!-- 자격증 섹션 -->
+        <div class="portfolio-section">
+            <h3>Certifications</h3>
+            <div class="certificate-item">
+                <div>
+                    <h4>AWS Certified Solutions Architect</h4>
+                    <p>Amazon Web Services</p>
+                </div>
+                <p>2022</p>
+            </div>
+            <div class="certificate-item">
+                <div>
+                    <h4>Oracle Certified Professional, Java SE 11 Developer</h4>
+                    <p>Oracle</p>
+                </div>
+                <p>2021</p>
+            </div>
+            <div class="certificate-item">
+                <div>
+                    <h4>Certified Kubernetes Administrator</h4>
+                    <p>Cloud Native Computing Foundation</p>
+                </div>
+                <p>2023</p>
+            </div>
+        </div>
+
+        <!-- 경력 섹션 -->
+        <div class="portfolio-section">
+            <h3>Experience</h3>
+            <div class="experience-item">
+                <h4>시니어 물류 시스템 개발자</h4>
+                <p>ABC 물류 테크 | 2021 - 현재</p>
+                <ul>
+                    <li>물류 자동화 시스템 설계 및 개발</li>
+                    <li>실시간 물류 추적 시스템 구축</li>
+                    <li>마이크로서비스 아키텍처 설계 및 구현</li>
+                    <li>팀 리드로서 5명의 개발자 관리</li>
+                </ul>
+            </div>
+            <div class="experience-item">
+                <h4>물류 시스템 개발자</h4>
+                <p>XYZ 물류 솔루션 | 2018 - 2021</p>
+                <ul>
+                    <li>재고 관리 시스템 개발</li>
+                    <li>물류 경로 최적화 알고리즘 구현</li>
+                    <li>데이터 분석 및 시각화 도구 개발</li>
+                </ul>
+            </div>
+            <div class="experience-item">
+                <h4>주니어 개발자</h4>
+                <p>123 물류 | 2016 - 2018</p>
+                <ul>
+                    <li>물류 웹 애플리케이션 유지보수</li>
+                    <li>API 개발 및 통합</li>
+                    <li>버그 수정 및 성능 최적화</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SSAFY 프로젝트 섹션 -->
+        <div class="portfolio-section">
+            <h3>SSAFY Projects</h3>
+            <div class="project-grid">
+                <!-- SSAFY 프로젝트 1 -->
+                <a href="https://github.com/yourusername/logistics-tracking" class="project-card" target="_blank">
+                    <h4>실시간 물류 추적 시스템</h4>
+                    <p>IoT 센서와 GPS를 활용한 실시간 물류 추적 시스템을 개발했습니다. 고객은 웹 및 모바일 앱을 통해 물류 상태를 실시간으로 확인할 수 있습니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">Java</span>
+                        <span class="skill-item">Spring Boot</span>
+                        <span class="skill-item">React</span>
+                        <span class="skill-item">MongoDB</span>
+                        <span class="skill-item">IoT</span>
+                    </div>
+                </a>
+
+                <!-- SSAFY 프로젝트 2 -->
+                <a href="https://github.com/yourusername/logistics-automation" class="project-card" target="_blank">
+                    <h4>물류 자동화 플랫폼</h4>
+                    <p>물류 프로세스를 자동화하는 플랫폼을 개발했습니다. 주문 처리, 재고 관리, 배송 일정 조정 등을 자동화하여 효율성을 높였습니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">Express</span>
+                        <span class="skill-item">React</span>
+                        <span class="skill-item">PostgreSQL</span>
+                        <span class="skill-item">Docker</span>
+                    </div>
+                </a>
+
+                <!-- SSAFY 프로젝트 3 -->
+                <a href="https://github.com/yourusername/route-optimization" class="project-card" target="_blank">
+                    <h4>물류 경로 최적화 시스템</h4>
+                    <p>머신러닝 알고리즘을 활용하여 물류 경로를 최적화하는 시스템을 개발했습니다. 배송 시간과 비용을 최소화하는 경로를 제안합니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">Python</span>
+                        <span class="skill-item">TensorFlow</span>
+                        <span class="skill-item">Django</span>
+                        <span class="skill-item">PostgreSQL</span>
+                        <span class="skill-item">AWS</span>
+                    </div>
+                </a>
+
+                <!-- SSAFY 프로젝트 4 -->
+                <a href="https://github.com/yourusername/warehouse-management" class="project-card" target="_blank">
+                    <h4>스마트 창고 관리 시스템</h4>
+                    <p>IoT 센서와 AI를 활용한 스마트 창고 관리 시스템을 개발했습니다. 재고 위치 추적, 자동 입출고, 이상 징후 감지 등의 기능을 구현했습니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">Java</span>
+                        <span class="skill-item">Spring Boot</span>
+                        <span class="skill-item">Vue.js</span>
+                        <span class="skill-item">MySQL</span>
+                        <span class="skill-item">TensorFlow</span>
+                    </div>
+                </a>
+
+                <!-- SSAFY 프로젝트 5 -->
+                <a href="https://github.com/yourusername/logistics-analytics" class="project-card" target="_blank">
+                    <h4>물류 데이터 분석 플랫폼</h4>
+                    <p>물류 데이터를 수집하고 분석하는 플랫폼을 개발했습니다. 데이터 시각화, 예측 분석, 성과 지표 모니터링 등의 기능을 제공합니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">Python</span>
+                        <span class="skill-item">Django</span>
+                        <span class="skill-item">React</span>
+                        <span class="skill-item">PostgreSQL</span>
+                        <span class="skill-item">D3.js</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 개인 프로젝트 섹션 -->
+        <div class="portfolio-section">
+            <h3>Personal Projects</h3>
+            <div class="project-grid">
+                <!-- 개인 프로젝트 1 -->
+                <a href="https://github.com/yourusername/inventory-management" class="project-card" target="_blank">
+                    <h4>재고 관리 시스템</h4>
+                    <p>실시간 재고 추적 및 예측 시스템을 개발했습니다. 과거 데이터를 분석하여 재고 수준을 예측하고, 자동 발주 시스템을 구현했습니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">Java</span>
+                        <span class="skill-item">Spring Boot</span>
+                        <span class="skill-item">Vue.js</span>
+                        <span class="skill-item">MySQL</span>
+                        <span class="skill-item">Redis</span>
+                    </div>
+                </a>
+
+                <!-- 개인 프로젝트 2 -->
+                <a href="https://github.com/yourusername/logistics-dashboard" class="project-card" target="_blank">
+                    <h4>물류 분석 대시보드</h4>
+                    <p>물류 데이터를 시각화하는 대시보드를 개발했습니다. 주요 성과 지표(KPI)를 실시간으로 모니터링하고, 데이터 기반 의사결정을 지원합니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">JavaScript</span>
+                        <span class="skill-item">React</span>
+                        <span class="skill-item">D3.js</span>
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">MongoDB</span>
+                    </div>
+                </a>
+
+                <!-- 개인 프로젝트 3 -->
+                <a href="https://github.com/yourusername/delivery-optimization" class="project-card" target="_blank">
+                    <h4>배송 최적화 시스템</h4>
+                    <p>배송 경로와 일정을 최적화하는 시스템을 개발했습니다. 실시간 교통 정보와 날씨 데이터를 활용하여 효율적인 배송 계획을 수립합니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">Python</span>
+                        <span class="skill-item">Flask</span>
+                        <span class="skill-item">React</span>
+                        <span class="skill-item">PostgreSQL</span>
+                        <span class="skill-item">Google Maps API</span>
+                    </div>
+                </a>
+
+                <!-- 개인 프로젝트 4 -->
+                <a href="https://github.com/yourusername/supply-chain-visualization" class="project-card" target="_blank">
+                    <h4>공급망 시각화 도구</h4>
+                    <p>공급망 데이터를 시각적으로 표현하는 도구를 개발했습니다. 공급망의 각 단계를 인터랙티브하게 탐색하고 분석할 수 있습니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">JavaScript</span>
+                        <span class="skill-item">Vue.js</span>
+                        <span class="skill-item">D3.js</span>
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">MongoDB</span>
+                    </div>
+                </a>
+
+                <!-- 개인 프로젝트 5 -->
+                <a href="https://github.com/yourusername/logistics-mobile" class="project-card" target="_blank">
+                    <h4>물류 모바일 앱</h4>
+                    <p>물류 현장에서 사용할 수 있는 모바일 앱을 개발했습니다. 실시간 물류 상태 확인, 문서 관리, 현장 보고 등의 기능을 제공합니다.</p>
+                    <div class="skill-container">
+                        <span class="skill-item">React Native</span>
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">Express</span>
+                        <span class="skill-item">MongoDB</span>
+                        <span class="skill-item">Firebase</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- To Be 섹션 -->
+        <div class="portfolio-section">
+            <h3>To Be</h3>
+            <div class="to-be-list">
+                <div class="to-be-item">
+                    <i class="fas fa-rocket"></i>
+                    <div class="to-be-item-content">
+                        <h4>물류 AI 전문가</h4>
+                        <p>인공지능과 머신러닝을 활용한 물류 최적화 시스템을 개발하여 물류 산업의 혁신을 이끌고자 합니다.</p>
+                    </div>
+                </div>
+                <div class="to-be-item">
+                    <i class="fas fa-globe"></i>
+                    <div class="to-be-item-content">
+                        <h4>글로벌 물류 플랫폼 구축</h4>
+                        <p>국경을 초월한 글로벌 물류 네트워크를 구축하여 효율적인 국제 물류 시스템을 개발하고자 합니다.</p>
+                    </div>
+                </div>
+                <div class="to-be-item">
+                    <i class="fas fa-leaf"></i>
+                    <div class="to-be-item-content">
+                        <h4>친환경 물류 솔루션</h4>
+                        <p>탄소 배출을 최소화하는 친환경 물류 솔루션을 개발하여 지속 가능한 물류 시스템을 구축하고자 합니다.</p>
+                    </div>
+                </div>
+                <div class="to-be-item">
+                    <i class="fas fa-users"></i>
+                    <div class="to-be-item-content">
+                        <h4>물류 기술 교육자</h4>
+                        <p>물류 시스템 개발 경험을 바탕으로 후배 개발자들을 교육하고 물류 기술 생태계를 확장하고자 합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Me 섹션 -->
+        <div class="portfolio-section">
+            <h3>Contact Me</h3>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:your.email@example.com">your.email@example.com</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-linkedin"></i>
+                    <a href="https://linkedin.com/in/yourusername" target="_blank">linkedin.com/in/yourusername</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="scroll-container"></div>
+
+    <script>
+        const truck = document.getElementById('truck');
+        const airplane = document.getElementById('airplane');
+        const ship = document.getElementById('ship');
+        const road = document.querySelector('.road');
+
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            
+            // 배경색 변경
+            if (scrollPercentage > 50) {
+                document.body.setAttribute('data-scroll', 'sea');
+            } else if (scrollPercentage > 25) {
+                document.body.setAttribute('data-scroll', 'sky');
+            } else {
+                document.body.setAttribute('data-scroll', 'road');
+            }
+            
+            // 트럭 위치 계산 (0-25% 구간에서 이동)
+            const truckPosition = Math.min(Math.max(scrollPercentage * 4, 0), 120);
+            const isTruckOutOfView = scrollPercentage > 25;
+            
+            // 비행기 위치 계산 (25-50% 구간에서 이동)
+            const airplanePosition = isTruckOutOfView
+                ? Math.min(Math.max((scrollPercentage - 25) * 4, -20), 120)
+                : -20;
+            const isAirplaneOutOfView = scrollPercentage > 50;
+
+            // 배 위치 전환 (50-90%)
+            if (scrollPercentage >= 50) {
+                ship.style.opacity = '1';
+                ship.style.top = `${Math.min((scrollPercentage - 50) * 2.5, 100)}%`;
+                ship.style.transform = 'rotate(180deg)';
+            } else {
+                ship.style.opacity = '0';
+                ship.style.top = '-20%';
+                ship.style.transform = 'rotate(180deg)';
+            }
+            
+            // 배경 전환
+            if (scrollPercentage > 50) {
+                // 바다로 전환
+                road.classList.remove('sky');
+                road.classList.add('sea');
+            } else if (scrollPercentage > 25) {
+                // 하늘로 전환 (25% 이후에 전환)
+                road.classList.remove('sea');
+                road.classList.add('sky');
+                updateSkyElements();
+            } else {
+                // 도로 상태로 전환
+                removeElements();
+            }
+
+            // 트럭 위치와 투명도 적용
+            truck.style.top = `${truckPosition}%`;
+            truck.style.opacity = isTruckOutOfView ? 0 : 1;
+
+            // 비행기 위치와 투명도 적용
+            airplane.style.top = `${airplanePosition}%`;
+            airplane.style.opacity = isTruckOutOfView && !isAirplaneOutOfView ? 1 : 0;
+        });
+
+        function updateSkyElements() {
+            // 기존 구름이 없을 때만 생성
+            const existingClouds = document.querySelectorAll('.cloud');
+            if (existingClouds.length === 0) {
+                const sky = document.querySelector('.sky');
+                for (let i = 1; i <= 5; i++) {
+                    const cloud = document.createElement('div');
+                    cloud.className = `cloud cloud-${i}`;
+                    sky.appendChild(cloud);
+                }
+            }
+        }
+
+        function removeElements() {
+            // 구름 제거
+            const clouds = document.querySelectorAll('.cloud');
+            clouds.forEach(cloud => cloud.remove());
+            
+            // road 요소에서 sea 클래스 제거
+            const road = document.querySelector('.road');
+            if (road) {
+                road.classList.remove('sea', 'sky');
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        window.addEventListener('load', () => {
+            // 초기 상태 설정
+            truck.style.top = '0%';
+            truck.style.opacity = 1;
+            airplane.style.top = '-20%';
+            airplane.style.opacity = 0;
+            ship.style.top = '-20%';
+            ship.style.opacity = 0;
+            
+            // 초기 배경 설정
+            document.body.setAttribute('data-scroll', 'road');
+            road.classList.remove('sky', 'sea');
+            removeElements();
+        });
+    </script>
+</body>
+</html> 
