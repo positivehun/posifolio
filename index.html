@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
             margin: 0;
@@ -235,7 +237,7 @@
         }
 
         .cloud-trail {
-            width: 30px;
+            width: 10px;
             height: 15px;
             background: rgba(255, 255, 255, 0.6);
             border-radius: 15px;
@@ -529,6 +531,30 @@
         }
 
         /* Contact Me 섹션 스타일 */
+        .contact-section {
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-right: 2rem;
+            margin-left: 2rem;
+            margin-top: 6rem; /* 고정된 박스 아래에 위치하도록 여백 추가 */
+            min-height: 250px; /* 최소 높이 설정 */
+        }
+
+        .contact-section h2 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: inherit;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
         .contact-info {
             display: flex;
             flex-direction: column;
@@ -617,6 +643,90 @@
             font-size: 0.9rem;
             color: inherit;
         }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            transition: transform 0.3s ease;
+            color: inherit;
+            font-size: 2rem;
+        }
+
+        .social-link:hover {
+            transform: scale(1.1);
+            color: #007bff;
+        }
+
+        .social-icon {
+            width: 32px;
+            height: 32px;
+            filter: brightness(0) invert(1);
+            transition: filter 0.3s ease;
+        }
+
+        .social-link:hover .social-icon {
+            filter: brightness(0) invert(0.8);
+        }
+
+        /* 기술 스택 카테고리 스타일 */
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-category h4 {
+            font-size: 1.1rem;
+            margin: 0 0 0.8rem 0;
+            color: inherit;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.4rem;
+        }
+
+        .skill-category:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 자격증 카테고리 스타일 */
+        .certificate-category {
+            margin-bottom: 2rem;
+        }
+
+        .certificate-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .certificate-category h4 {
+            font-size: 1.1rem;
+            margin: 0 0 0.8rem 0;
+            color: inherit;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.4rem;
+        }
+
+        /* About Me 섹션 스타일 */
+        .about-me-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-me-content {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -632,62 +742,170 @@
     <div class="content-container">
         <div class="fixed-box-background"></div>
         <div class="fixed-box">
-            <h2>물류 시스템 개발자 포트폴리오</h2>
-            <p>안녕하세요. 물류 시스템 개발자입니다. 스크롤을 내려서 제 프로젝트들을 확인해보세요.</p>
+            <h2>파지티브헌(Positive Hun)</h2>
+            <p>물류시스템 개발 및 DX 전문가 김지헌입니다</p>
         </div>
 
         <!-- 자기소개 섹션 -->
         <div class="portfolio-section" style="margin-top: 12rem;">
             <h3>About Me</h3>
-            <p>안녕하세요. 저는 물류 시스템 개발자로서 효율적인 물류 프로세스와 자동화 솔루션을 개발하는 데 열정을 가지고 있습니다. 복잡한 물류 네트워크를 단순화하고, 실시간 추적 시스템을 구축하며, 데이터 기반 의사결정을 지원하는 시스템을 개발하고 있습니다.</p>
-            <p>현재는 물류 자동화, 실시간 추적, 재고 관리, 경로 최적화 등의 프로젝트에 참여하고 있으며, 최신 기술을 활용하여 물류 산업의 디지털 전환에 기여하고 있습니다.</p>
+            <div class="about-me-container">
+                <img src="photo/김지헌프로필.jpeg" alt="김지헌 프로필" class="profile-image">
+                <div class="about-me-content">
+                    <p>안녕하세요. 저는 동원산업 DT본부 물류기술팀에서 물류 시스템 개발자로 일하고 있는 김지헌입니다.</p>
+                    <p>IT라는 기술과 물류라는 비즈니스를 조합하여 합리적이고 가성비 있는 물류산업을 만들고 싶은 개발자입니다.</p>
+                    <p>현재 3PL 물류시스템 운영 및 개발을 담당하고 있으며, 산업용 PDA 사진검수 시스템, 의약품 추적 시스템, EAI/WMS/OMS/TMS 개발 및 관리, 데이터 분석 및 경영정보 시각화 등 다양한 프로젝트를 수행하고 있습니다.</p>
+                    <p>물류 프로세스 자동화와 최적화에 대한 경험을 쌓고 있으며, 이를 통해 물류 효율성을 향상시키는 솔루션을 개발하고 있습니다.</p>
+                    <p>특히 데이터 기반의 의사결정과 프로세스 개선에 관심이 많으며, 지속적인 학습과 도전을 통해 더 나은 물류 시스템을 만들어가고 있습니다.</p>
+                </div>
+            </div>
         </div>
 
         <!-- 기술 스택 섹션 -->
         <div class="portfolio-section">
             <h3>Technical Skills</h3>
-            <div class="skill-container">
-                <span class="skill-item">Java</span>
-                <span class="skill-item">Spring Boot</span>
-                <span class="skill-item">JavaScript</span>
-                <span class="skill-item">React</span>
-                <span class="skill-item">Node.js</span>
-                <span class="skill-item">SQL</span>
-                <span class="skill-item">MongoDB</span>
-                <span class="skill-item">Docker</span>
-                <span class="skill-item">Kubernetes</span>
-                <span class="skill-item">AWS</span>
-                <span class="skill-item">CI/CD</span>
-                <span class="skill-item">Git</span>
-                <span class="skill-item">RESTful API</span>
-                <span class="skill-item">Microservices</span>
-                <span class="skill-item">Agile</span>
+            
+            <!-- 백엔드 기술 -->
+            <div class="skill-category">
+                <h4>Backend</h4>
+                <div class="skill-container">
+                    <span class="skill-item">Java</span>
+                    <span class="skill-item">Spring</span>
+                    <span class="skill-item">Python</span>
+                    <span class="skill-item">Node.js</span>
+                </div>
+            </div>
+
+            <!-- 프론트엔드 기술 -->
+            <div class="skill-category">
+                <h4>Frontend</h4>
+                <div class="skill-container">
+                    <span class="skill-item">JavaScript</span>
+                    <span class="skill-item">TypeScript</span>
+                    <span class="skill-item">React</span>
+                </div>
+            </div>
+
+            <!-- 데이터베이스 -->
+            <div class="skill-category">
+                <h4>Database</h4>
+                <div class="skill-container">
+                    <span class="skill-item">MySQL</span>
+                    <span class="skill-item">MongoDB</span>
+                </div>
+            </div>
+
+            <!-- DevOps & Cloud -->
+            <div class="skill-category">
+                <h4>DevOps & Cloud</h4>
+                <div class="skill-container">
+                    <span class="skill-item">Git</span>
+                    <span class="skill-item">Jenkins</span>
+                    <span class="skill-item">Docker</span>
+                    <span class="skill-item">AWS</span>
+                </div>
             </div>
         </div>
 
         <!-- 자격증 섹션 -->
         <div class="portfolio-section">
             <h3>Certifications</h3>
-            <div class="certificate-item">
-                <div>
-                    <h4>AWS Certified Solutions Architect</h4>
-                    <p>Amazon Web Services</p>
+            
+            <!-- IT 자격증 -->
+            <div class="certificate-category">
+                <h4>IT</h4>
+                <div class="certificate-item">
+                    <div>
+                        <h4>정보처리기사</h4>
+                        <p>한국산업인력공단</p>
+                    </div>
+                    <p>2021.06</p>
                 </div>
-                <p>2022</p>
+                <div class="certificate-item">
+                    <div>
+                        <h4>빅데이터분석기사</h4>
+                        <p>한국데이터산업진흥원</p>
+                    </div>
+                    <p>2021.12</p>
+                </div>
+                <div class="certificate-item">
+                    <div>
+                        <h4>SQLD</h4>
+                        <p>한국데이터산업진흥원</p>
+                    </div>
+                    <p>2021.12</p>
+                </div>
+                <div class="certificate-item">
+                    <div>
+                        <h4>ADsP</h4>
+                        <p>한국데이터산업진흥원</p>
+                    </div>
+                    <p>2021.09</p>
+                </div>
+                <div class="certificate-item">
+                    <div>
+                        <h4>리눅스마스터 2급</h4>
+                        <p>정보통신기술자격검정</p>
+                    </div>
+                    <p>2022.04</p>
+                </div>
+                <div class="certificate-item">
+                    <div>
+                        <h4>AICE</h4>
+                        <p>한국데이터산업진흥원</p>
+                    </div>
+                    <p>2024.03</p>
+                </div>
             </div>
-            <div class="certificate-item">
-                <div>
-                    <h4>Oracle Certified Professional, Java SE 11 Developer</h4>
-                    <p>Oracle</p>
+
+            <!-- 물류 자격증 -->
+            <div class="certificate-category">
+                <h4>물류</h4>
+                <div class="certificate-item">
+                    <div>
+                        <h4>유통관리사 2급</h4>
+                        <p>대한상공회의소</p>
+                    </div>
+                    <p>2024.05</p>
                 </div>
-                <p>2021</p>
+                <div class="certificate-item">
+                    <div>
+                        <h4>ERP물류 정보관리사 1급</h4>
+                        <p>한국생산성본부</p>
+                    </div>
+                    <p>2025.04</p>
+                </div>
             </div>
-            <div class="certificate-item">
-                <div>
-                    <h4>Certified Kubernetes Administrator</h4>
-                    <p>Cloud Native Computing Foundation</p>
+
+            <!-- 어학 자격증 -->
+            <div class="certificate-category">
+                <h4>어학</h4>
+                <div class="certificate-item">
+                    <div>
+                        <h4>OPIc IH</h4>
+                        <p>ACTFL</p>
+                    </div>
+                    <p>2021.06</p>
                 </div>
-                <p>2023</p>
+                <div class="certificate-item">
+                    <div>
+                        <h4>OPIc IM2</h4>
+                        <p>ACTFL</p>
+                    </div>
+                    <p>2025.02</p>
+                </div>
+            </div>
+
+            <!-- 기타 자격증 -->
+            <div class="certificate-category">
+                <h4>기타</h4>
+                <div class="certificate-item">
+                    <div>
+                        <h4>한국사 1급</h4>
+                        <p>한국사능력검정시험</p>
+                    </div>
+                    <p>2021.08</p>
+                </div>
             </div>
         </div>
 
@@ -695,31 +913,25 @@
         <div class="portfolio-section">
             <h3>Experience</h3>
             <div class="experience-item">
-                <h4>시니어 물류 시스템 개발자</h4>
-                <p>ABC 물류 테크 | 2021 - 현재</p>
+                <h4>동원산업 DT본부 물류기술팀</h4>
+                <p>2023.01 - 현재</p>
                 <ul>
-                    <li>물류 자동화 시스템 설계 및 개발</li>
-                    <li>실시간 물류 추적 시스템 구축</li>
-                    <li>마이크로서비스 아키텍처 설계 및 구현</li>
-                    <li>팀 리드로서 5명의 개발자 관리</li>
+                    <li>3PL 물류시스템 운영 및 개발</li>
+                    <li>산업용 PDA 사진검수 시스템 개발 (Android Studio, jQuery, 전문통신, PL/SQL)</li>
+                    <li>의약품 추적 시스템 개발 (Android Studio, jQuery, 전문통신, PL/SQL)</li>
+                    <li>EAI/WMS/OMS/TMS 개발 및 관리 (Spring, Tomcat, PL/SQL, NexaCro, Mybatis)</li>
+                    <li>데이터 분석 및 경영정보 시각화 (Databricks, Power BI)</li>
+                    <li>물류시스템 Flutter 모바일 전환 프로젝트 매니저</li>
                 </ul>
             </div>
             <div class="experience-item">
-                <h4>물류 시스템 개발자</h4>
-                <p>XYZ 물류 솔루션 | 2018 - 2021</p>
+                <h4>삼성청년SW아카데미(SSAFY) 7기</h4>
+                <p>2022.1 - 2022.12</p>
                 <ul>
-                    <li>재고 관리 시스템 개발</li>
-                    <li>물류 경로 최적화 알고리즘 구현</li>
-                    <li>데이터 분석 및 시각화 도구 개발</li>
-                </ul>
-            </div>
-            <div class="experience-item">
-                <h4>주니어 개발자</h4>
-                <p>123 물류 | 2016 - 2018</p>
-                <ul>
-                    <li>물류 웹 애플리케이션 유지보수</li>
-                    <li>API 개발 및 통합</li>
-                    <li>버그 수정 및 성능 최적화</li>
+                    <li>웹/앱 개발 프로젝트 수행</li>
+                    <li>알고리즘 문제 해결 및 학습</li>
+                    <li>팀 프로젝트 협업 경험</li>
+                    <li>블록체인, AI 등 신기술 학습</li>
                 </ul>
             </div>
         </div>
@@ -729,67 +941,43 @@
             <h3>SSAFY Projects</h3>
             <div class="project-grid">
                 <!-- SSAFY 프로젝트 1 -->
-                <a href="https://github.com/yourusername/logistics-tracking" class="project-card" target="_blank">
-                    <h4>실시간 물류 추적 시스템</h4>
-                    <p>IoT 센서와 GPS를 활용한 실시간 물류 추적 시스템을 개발했습니다. 고객은 웹 및 모바일 앱을 통해 물류 상태를 실시간으로 확인할 수 있습니다.</p>
+                <a href="https://github.com/positivehun/geekhub" class="project-card" target="_blank">
+                    <h4>GEEK-HUB (긱허브)</h4>
+                    <p>클라우드스톤사의 배달긱 서비스 운영을 편리하게 하기 위한 배달기사용 어플리케이션 + 관리자용 관제 시스템 구축. MSA를 활용한 서비스 구축 및 운영, Kafka를 활용한 데이터 전송 구현.</p>
                     <div class="skill-container">
-                        <span class="skill-item">Java</span>
-                        <span class="skill-item">Spring Boot</span>
-                        <span class="skill-item">React</span>
+                        <span class="skill-item">JavaScript</span>
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">Express</span>
                         <span class="skill-item">MongoDB</span>
-                        <span class="skill-item">IoT</span>
+                        <span class="skill-item">Kafka</span>
+                        <span class="skill-item">MSA</span>
                     </div>
                 </a>
 
                 <!-- SSAFY 프로젝트 2 -->
-                <a href="https://github.com/yourusername/logistics-automation" class="project-card" target="_blank">
-                    <h4>물류 자동화 플랫폼</h4>
-                    <p>물류 프로세스를 자동화하는 플랫폼을 개발했습니다. 주문 처리, 재고 관리, 배송 일정 조정 등을 자동화하여 효율성을 높였습니다.</p>
+                <a href="https://github.com/positivehun/FITWEEN_by_CTRL" class="project-card" target="_blank">
+                    <h4>FITWEEN (피트윈)</h4>
+                    <p>신체,위치데이터 기반 의류 공유 및 거래 플랫폼. SpringBoot를 활용한 CRUD API 구축, WebSocket과 STOMP를 활용한 실시간 채팅서버 구축, Jenkins와 Docker를 활용한 배포환경 설계.</p>
                     <div class="skill-container">
-                        <span class="skill-item">Node.js</span>
-                        <span class="skill-item">Express</span>
+                        <span class="skill-item">Java</span>
+                        <span class="skill-item">Spring</span>
+                        <span class="skill-item">MySQL</span>
                         <span class="skill-item">React</span>
-                        <span class="skill-item">PostgreSQL</span>
+                        <span class="skill-item">WebSocket</span>
                         <span class="skill-item">Docker</span>
                     </div>
                 </a>
 
                 <!-- SSAFY 프로젝트 3 -->
-                <a href="https://github.com/yourusername/route-optimization" class="project-card" target="_blank">
-                    <h4>물류 경로 최적화 시스템</h4>
-                    <p>머신러닝 알고리즘을 활용하여 물류 경로를 최적화하는 시스템을 개발했습니다. 배송 시간과 비용을 최소화하는 경로를 제안합니다.</p>
+                <a href="https://github.com/positivehun/ALDL" class="project-card" target="_blank">
+                    <h4>ALDL (알록달록)</h4>
+                    <p>블록체인 기술을 활용한 디지털 자물쇠 서비스입니다. 사용자는 사진과 메시지를 담아 자신만의 자물쇠를 등록하고 공유할 수 있습니다.</p>
                     <div class="skill-container">
-                        <span class="skill-item">Python</span>
-                        <span class="skill-item">TensorFlow</span>
-                        <span class="skill-item">Django</span>
-                        <span class="skill-item">PostgreSQL</span>
-                        <span class="skill-item">AWS</span>
-                    </div>
-                </a>
-
-                <!-- SSAFY 프로젝트 4 -->
-                <a href="https://github.com/yourusername/warehouse-management" class="project-card" target="_blank">
-                    <h4>스마트 창고 관리 시스템</h4>
-                    <p>IoT 센서와 AI를 활용한 스마트 창고 관리 시스템을 개발했습니다. 재고 위치 추적, 자동 입출고, 이상 징후 감지 등의 기능을 구현했습니다.</p>
-                    <div class="skill-container">
-                        <span class="skill-item">Java</span>
-                        <span class="skill-item">Spring Boot</span>
-                        <span class="skill-item">Vue.js</span>
-                        <span class="skill-item">MySQL</span>
-                        <span class="skill-item">TensorFlow</span>
-                    </div>
-                </a>
-
-                <!-- SSAFY 프로젝트 5 -->
-                <a href="https://github.com/yourusername/logistics-analytics" class="project-card" target="_blank">
-                    <h4>물류 데이터 분석 플랫폼</h4>
-                    <p>물류 데이터를 수집하고 분석하는 플랫폼을 개발했습니다. 데이터 시각화, 예측 분석, 성과 지표 모니터링 등의 기능을 제공합니다.</p>
-                    <div class="skill-container">
-                        <span class="skill-item">Python</span>
-                        <span class="skill-item">Django</span>
+                        <span class="skill-item">TypeScript</span>
                         <span class="skill-item">React</span>
-                        <span class="skill-item">PostgreSQL</span>
-                        <span class="skill-item">D3.js</span>
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">Blockchain</span>
+                        <span class="skill-item">Solidity</span>
                     </div>
                 </a>
             </div>
@@ -800,67 +988,28 @@
             <h3>Personal Projects</h3>
             <div class="project-grid">
                 <!-- 개인 프로젝트 1 -->
-                <a href="https://github.com/yourusername/inventory-management" class="project-card" target="_blank">
-                    <h4>재고 관리 시스템</h4>
-                    <p>실시간 재고 추적 및 예측 시스템을 개발했습니다. 과거 데이터를 분석하여 재고 수준을 예측하고, 자동 발주 시스템을 구현했습니다.</p>
+                <a href="https://barcdog.vercel.app/" class="project-card" target="_blank">
+                    <h4>물류바코드 / QR생성 사이트</h4>
+                    <p>물류 업무에 필요한 바코드와 QR코드를 생성하고 관리할 수 있는 웹 서비스입니다. 물류 프로세스 최적화를 위한 도구로 개발되었습니다.</p>
                     <div class="skill-container">
-                        <span class="skill-item">Java</span>
-                        <span class="skill-item">Spring Boot</span>
-                        <span class="skill-item">Vue.js</span>
-                        <span class="skill-item">MySQL</span>
-                        <span class="skill-item">Redis</span>
+                        <span class="skill-item">TypeScript</span>
+                        <span class="skill-item">React</span>
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">MongoDB</span>
+                        <span class="skill-item">Docker</span>
                     </div>
                 </a>
 
                 <!-- 개인 프로젝트 2 -->
-                <a href="https://github.com/yourusername/logistics-dashboard" class="project-card" target="_blank">
-                    <h4>물류 분석 대시보드</h4>
-                    <p>물류 데이터를 시각화하는 대시보드를 개발했습니다. 주요 성과 지표(KPI)를 실시간으로 모니터링하고, 데이터 기반 의사결정을 지원합니다.</p>
+                <a href="https://certione.vercel.app/" class="project-card" target="_blank">
+                    <h4>자격증 문제은행 사이트</h4>
+                    <p>다양한 자격증 시험 문제를 풀고 학습할 수 있는 웹 플랫폼입니다. 사용자 맞춤형 학습 경험을 제공합니다.</p>
                     <div class="skill-container">
-                        <span class="skill-item">JavaScript</span>
+                        <span class="skill-item">TypeScript</span>
                         <span class="skill-item">React</span>
-                        <span class="skill-item">D3.js</span>
                         <span class="skill-item">Node.js</span>
                         <span class="skill-item">MongoDB</span>
-                    </div>
-                </a>
-
-                <!-- 개인 프로젝트 3 -->
-                <a href="https://github.com/yourusername/delivery-optimization" class="project-card" target="_blank">
-                    <h4>배송 최적화 시스템</h4>
-                    <p>배송 경로와 일정을 최적화하는 시스템을 개발했습니다. 실시간 교통 정보와 날씨 데이터를 활용하여 효율적인 배송 계획을 수립합니다.</p>
-                    <div class="skill-container">
-                        <span class="skill-item">Python</span>
-                        <span class="skill-item">Flask</span>
-                        <span class="skill-item">React</span>
-                        <span class="skill-item">PostgreSQL</span>
-                        <span class="skill-item">Google Maps API</span>
-                    </div>
-                </a>
-
-                <!-- 개인 프로젝트 4 -->
-                <a href="https://github.com/yourusername/supply-chain-visualization" class="project-card" target="_blank">
-                    <h4>공급망 시각화 도구</h4>
-                    <p>공급망 데이터를 시각적으로 표현하는 도구를 개발했습니다. 공급망의 각 단계를 인터랙티브하게 탐색하고 분석할 수 있습니다.</p>
-                    <div class="skill-container">
-                        <span class="skill-item">JavaScript</span>
-                        <span class="skill-item">Vue.js</span>
-                        <span class="skill-item">D3.js</span>
-                        <span class="skill-item">Node.js</span>
-                        <span class="skill-item">MongoDB</span>
-                    </div>
-                </a>
-
-                <!-- 개인 프로젝트 5 -->
-                <a href="https://github.com/yourusername/logistics-mobile" class="project-card" target="_blank">
-                    <h4>물류 모바일 앱</h4>
-                    <p>물류 현장에서 사용할 수 있는 모바일 앱을 개발했습니다. 실시간 물류 상태 확인, 문서 관리, 현장 보고 등의 기능을 제공합니다.</p>
-                    <div class="skill-container">
-                        <span class="skill-item">React Native</span>
-                        <span class="skill-item">Node.js</span>
-                        <span class="skill-item">Express</span>
-                        <span class="skill-item">MongoDB</span>
-                        <span class="skill-item">Firebase</span>
+                        <span class="skill-item">AWS</span>
                     </div>
                 </a>
             </div>
@@ -902,20 +1051,23 @@
         </div>
 
         <!-- Contact Me 섹션 -->
-        <div class="portfolio-section">
-            <h3>Contact Me</h3>
+        <div class="contact-section">
+            <h2>Contact Me</h2>
             <div class="contact-info">
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
-                    <a href="mailto:your.email@example.com">your.email@example.com</a>
+                    <a href="mailto:jihun3104@gmail.com">jihun3104@gmail.com</a>
                 </div>
-                <div class="contact-item">
-                    <i class="fab fa-github"></i>
-                    <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
-                </div>
-                <div class="contact-item">
-                    <i class="fab fa-linkedin"></i>
-                    <a href="https://linkedin.com/in/yourusername" target="_blank">linkedin.com/in/yourusername</a>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/positive_hun/" target="_blank" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/positivehun" target="_blank" class="social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/positivehun" target="_blank" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -927,13 +1079,24 @@
         const airplane = document.getElementById('airplane');
         const ship = document.getElementById('ship');
         const road = document.querySelector('.road');
+        const animationContainer = document.querySelector('.animation-container');
 
         // 운송수단 궤적 효과 생성
         function createTrail(type, x, y) {
             const trail = document.createElement('div');
             trail.className = `trail ${type}-trail`;
-            trail.style.left = `${x}%`;
-            trail.style.top = `${y}%`;
+            
+            // 애니메이션 컨테이너 기준으로 위치 계산
+            const containerRect = animationContainer.getBoundingClientRect();
+            const containerWidth = containerRect.width;
+            const containerHeight = containerRect.height;
+            
+            // 상대적 위치 계산 (퍼센트)
+            const relativeX = (x / containerWidth) * 100;
+            const relativeY = (y / containerHeight) * 100;
+            
+            trail.style.left = `${relativeX}%`;
+            trail.style.top = `${relativeY}%`;
             document.getElementById('trails').appendChild(trail);
 
             // 애니메이션 종료 후 요소 제거
@@ -958,9 +1121,13 @@
                 // 트럭 궤적 생성
                 if (isScrollingDown) {
                     const truckRect = truck.getBoundingClientRect();
-                    const x = 48;
-                    const y = ((truckRect.top + truckRect.height / 2) / window.innerHeight * 100) - 10;
-                    createTrail('smoke', x, y);
+                    const containerRect = animationContainer.getBoundingClientRect();
+                    
+                    // 트럭의 상대적 위치 계산
+                    const relativeX = truckRect.left - containerRect.left + truckRect.width / 2;
+                    const relativeY = truckRect.top - containerRect.top + truckRect.height / 2;
+                    
+                    createTrail('smoke', relativeX, relativeY);
                 }
             } else {
                 truck.style.opacity = 0;
@@ -975,15 +1142,18 @@
                 // 비행기 궤적 생성 (두 개의 자국)
                 if (isScrollingDown) {
                     const airplaneRect = airplane.getBoundingClientRect();
-                    const y = ((airplaneRect.top + airplaneRect.height / 2) / window.innerHeight * 100);
+                    const containerRect = animationContainer.getBoundingClientRect();
                     
-                    // 첫 번째 자국 (현재 위치 + 5픽셀)
-                    const x1 = 27;
-                    createTrail('cloud', x1, y);
+                    // 비행기의 상대적 위치 계산
+                    const relativeY = airplaneRect.top - containerRect.top + airplaneRect.height / 2;
                     
-                    // 두 번째 자국 (현재 위치 - 5픽셀)
-                    const x2 = 63;
-                    createTrail('cloud', x2, y);
+                    // 첫 번째 자국 (비행기 왼쪽)
+                    const relativeX1 = airplaneRect.left - containerRect.left + airplaneRect.width * 0.3 - 5;
+                    createTrail('cloud', relativeX1, relativeY);
+                    
+                    // 두 번째 자국 (비행기 오른쪽)
+                    const relativeX2 = airplaneRect.left - containerRect.left + airplaneRect.width * 0.7 - 5;
+                    createTrail('cloud', relativeX2, relativeY);
                 }
             } else {
                 airplane.style.opacity = 0;
@@ -998,9 +1168,13 @@
                 // 배 궤적 생성
                 if (isScrollingDown) {
                     const shipRect = ship.getBoundingClientRect();
-                    const x = 46;
-                    const y = ((shipRect.top + shipRect.height / 2) / window.innerHeight * 100) - 10;
-                    createTrail('wave', x, y);
+                    const containerRect = animationContainer.getBoundingClientRect();
+                    
+                    // 배의 상대적 위치 계산
+                    const relativeX = shipRect.left - containerRect.left + shipRect.width / 2 - 20;
+                    const relativeY = shipRect.top - containerRect.top + shipRect.height / 2;
+                    
+                    createTrail('wave', relativeX, relativeY);
                 }
             } else {
                 ship.style.opacity = 0;
